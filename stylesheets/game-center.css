@@ -1,6 +1,7 @@
 body {
     margin: 0;
     background: #dddddd;
+    cursor: default;
 }
 
 div#wrapper {
@@ -48,4 +49,13 @@ object#the-last-castle-gamefile {
 div#footer > p {
     margin: 0;
     color: #888888;
+}
+
+div#footer p > a {
+    text-decoration: none;
+    color: #888888;
+}
+
+div#footer p > a:hover {
+    text-decoration: underline;
 }
