@@ -1,8 +1,28 @@
+/* ~!@#$%^&*    whole    *&^%$#@!~ */
+
 body {
     margin: 0;
     background: #dddddd;
     cursor: default;
 }
+
+html, canvas, img {
+  image-rendering: optimizeSpeed;
+  image-rendering: optimize-contrast;
+  image-rendering: -moz-crisp-edges; /* FF */
+  image-rendering: -webkit-optimize-contrast; /* Webkit */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE */
+}
+
+canvas {
+    display: block;
+    margin: 32px 0 8px;
+    border: 4px solid #888888;
+    background: white;
+}
+
+
+/* ~!@#$%^&*    main structure    *&^%$#@!~ */
 
 div#wrapper {
     margin: 8px auto;
@@ -20,11 +40,23 @@ div#wrapper {
     background: white;
 }
 
+div#jaws_wrapper {
+    margin: 8px auto;
+    width: 800px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -ms-border-radius: 4px;
+    background: white;
+}
+
 div#header {
     padding: 8px;
 }
 
 div#main {
+    padding: 8px;
     min-height: 520px;
 }
 
@@ -32,11 +64,17 @@ div#footer {
     padding: 8px;
 }
 
+
+/* ~!@#$%^&*    header    *&^%$#@!~ */
+
 div#header > h1 {
     margin: 0;
     text-align: center;
     color: #888888;
 }
+
+
+/* ~!@#$%^&*    main    *&^%$#@!~ */
 
 object#kingdom-rush-gamefile {
     margin: 0 50px;
@@ -45,6 +83,14 @@ object#kingdom-rush-gamefile {
 object#the-last-castle-gamefile {
     margin: 0 40px;
 }
+
+span#info {
+    font-size: 24px;
+    color: #888888;
+}
+
+
+/* ~!@#$%^&*    footer    *&^%$#@!~ */
 
 div#footer > p {
     margin: 0;

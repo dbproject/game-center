@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>game center</title>
+        <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAC7u7sAAAAAAERmiABERN0AiLtVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERESIRERRBEUERIiERFEQURBESIhERRERBEREiIREURBERERIiEQBEQRERESIgABREEREREiIBEUQREREQIiEREREREQACIhEREREQABEiIREREQABERITMREQABERETMzEQABERERMzMRABERERETMxERERERERERH//wAAnzsAAI8RAADHgwAA48cAAPGDAAD4EQAA/DkAAPw/AAD4HwAA8Y8AAOPTAADH4QAAj+EAAJ/xAAD//wAA">
+        <link rel="stylesheet" type="text/css" href="stylesheets/game-center.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jaws.js"></script>
+        <script type="text/javascript">
+            var player;
+            var canvas;
+            var context;
+            var info_tag;
+            var bullets;
+            //var fps;
+
+            /* step0. set everything up, load sprites etc. */
+            function setup()
+            {
+                bullets = new jaws.SpriteList();
+                //fps = document.getElementById('fps');
+                //info_tag = document.getElementsByTagName('info');
+                info_tag = document.getElementById('info');
+
+                //canvas = document.getElementsByTagName('canvas')[0];
+                canvas = document.getElementById('canvas');
+                context = canvas.getContext('2d');
+
+                player = new jaws.Sprite({image: 'images/plane.png', x: 8, y: 188, context: context});
+                jaws.on_keydown('esc', setup);
+                jaws.preventDefaultKeys(['up', 'down', 'left', 'right', 'space']);
+            }
+ 
+            /* step1. execute the game logic */
+            function update()
+            {
+                if (jaws.pressed('left'))  { player.x -= 2; }
+                if (jaws.pressed('right')) { player.x += 2; }
+                if (jaws.pressed('up'))    { player.y -= 2; }
+                if (jaws.pressed('down'))  { player.y += 2; }
+                if (jaws.pressed('space'))
+                {
+                    bullets.push( new Bullet(player.rect().right, player.y+13) );
+                }
+                forceInsideCanvas(player);
+                bullets.deleteIf(isOutsideCanvas);
+            }
+    
+            /* step2. draw the update state on screen */
+            function draw()
+            {
+                jaws.clear();        // Same as: context.clearRect(0,0,jaws.width,jaws.height)
+       
+                player.draw();
+                bullets.draw();  // will call draw() on all items in the list
+
+                info_tag.innerHTML = 'fps: ' + jaws.game_loop.fps + ', player position: ' + player.x + ' / ' + player.y + ', w / h: ' + canvas.width + ' / ' + canvas.height + '.';
+                //fps.innerHTML = jaws.game_loop.fps;
+            }
+    
+            /* 2 functions that will help us remove bullets outside the canvas + keep the plane within the canvas. */
+            function isOutsideCanvas(item) { return (item.x < 0 || item.y < 0 || item.x > canvas.width || item.y > canvas.height); }
+            function forceInsideCanvas(item)
+            {
+                if(item.x < 0)                    { item.x = 0; }
+                if(item.x + item.width > canvas.width)     { item.x = canvas.width - item.width; }
+                if(item.y < 0)                    { item.y = 0; }
+                if(item.y + item.height  > canvas.height)  { item.y = canvas.height - item.height; }
+            }
+
+            /* Our simple bullet class, basically a circle with a position (x/y) */
+            function Bullet(x, y)
+            {
+                this.x = x;
+                this.y = y;
+                this.draw = function()
+                {
+                    this.x += 4;
+                    context.beginPath();
+                    context.arc(this.x, this.y, 4, 0, Math.PI*2, true); 
+                    context.stroke();
+                }
+            }
+
+            $(function()
+            {
+                jaws.assets.add('images/plane.png')
+                jaws.start();  // Per default this will load assets, call setup(), then loop update() and draw() in 60 FPS.
+            });
+        </script>
+    </head>
+    <body>
+        <div id="jaws_wrapper">
+            <div id="header">
+                <h1>game center</h1>
+            </div>
+            <div id="main">
+                <canvas id="canvas" width="776" height="400"></canvas>
+ 
+                <!--fps: <span id="fps"></span>, move with arrow keys.-->
+
+                <span id="info"></span>
+            </div>
+            <div id="footer">
+                <p>&copy;2012 game center. Designed for <a href="http://dbproject.github.com/">dbproject</a>. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+</html>
